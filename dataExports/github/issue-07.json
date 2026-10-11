@@ -1,0 +1,18 @@
+{
+  "number": 7,
+  "title": "Order spare parts: brake pads and chains",
+  "state": "open",
+  "labels": [
+    "inventory",
+    "purchasing"
+  ],
+  "assignees": [],
+  "author": "josephhomeworksai-hash",
+  "created_at": "2026-10-11T14:29:46Z",
+  "updated_at": "2026-10-11T14:29:46Z",
+  "url": "https://github.com/josephhomeworksai-hash/dealership-test-tasks/issues/7",
+  "repo": "josephhomeworksai-hash/dealership-test-tasks",
+  "comments": 0,
+  "body": "Low stock on brake pads and chains for Vento models. Request a quote from 2 suppliers.",
+  "source": "github"
+}

@@ -1,0 +1,17 @@
+{
+  "number": 8,
+  "title": "Prepare monthly sales report",
+  "state": "open",
+  "labels": [
+    "reporting"
+  ],
+  "assignees": [],
+  "author": "josephhomeworksai-hash",
+  "created_at": "2026-10-11T14:29:47Z",
+  "updated_at": "2026-10-11T14:29:47Z",
+  "url": "https://github.com/josephhomeworksai-hash/dealership-test-tasks/issues/8",
+  "repo": "josephhomeworksai-hash/dealership-test-tasks",
+  "comments": 0,
+  "body": "Collect sales from clients_sales table and make a summary by brand for October.",
+  "source": "github"
+}

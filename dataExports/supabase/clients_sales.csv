@@ -1,0 +1,11 @@
+id,client_name,client_contact,lead_source,motorcycle_id,payment_type,down_payment_usd,installments,sale_price_usd,status,inquiry_at,sold_at,created_at
+1,Carlos Test,@carlos_test_ig,Instagram,1,in_house_financing,500,12,1450,sold,2026-09-01T14:15:00+00:00,2026-09-05T20:00:00+00:00,2026-10-11T14:24:27.761953+00:00
+2,Maria Prueba,@maria_prueba_tt,TikTok,2,cash,1890,0,1890,sold,2026-09-02T16:30:00+00:00,2026-09-02T21:45:00+00:00,2026-10-11T14:24:27.761953+00:00
+3,Jose Ejemplo,@jose_ejemplo_tt,TikTok,5,in_house_financing,600,10,1520,negotiating,2026-09-10T23:20:00+00:00,,2026-10-11T14:24:27.761953+00:00
+4,Ana Demo,@ana_demo_ig,Instagram,8,in_house_financing,400,8,1380,sold,2026-09-12T12:50:00+00:00,2026-09-20T15:10:00+00:00,2026-10-11T14:24:27.761953+00:00
+5,Luis Falso,@luis_falso_ig,Instagram,4,in_house_financing,800,12,2350,negotiating,2026-09-16T01:05:00+00:00,,2026-10-11T14:24:27.761953+00:00
+6,Sofia Muestra,@sofia_muestra_tt,TikTok,7,cash,1190,0,1190,sold,2026-09-18T18:40:00+00:00,2026-09-19T14:30:00+00:00,2026-10-11T14:24:27.761953+00:00
+7,Pedro Ficticio,555-0101,Walk-in,9,in_house_financing,700,10,1750,sold,2026-09-22T13:15:00+00:00,2026-09-25T19:20:00+00:00,2026-10-11T14:24:27.761953+00:00
+8,Laura Inventada,@laura_inventada_ig,Instagram,6,in_house_financing,700,12,1980,negotiating,2026-09-28T22:00:00+00:00,,2026-10-11T14:24:27.761953+00:00
+9,Diego Simulado,@diego_simulado_tt,TikTok,1,cash,1450,0,1450,lost,2026-10-02T00:10:00+00:00,,2026-10-11T14:24:27.761953+00:00
+10,Valeria Imaginaria,@valeria_imaginaria_tt,TikTok,2,in_house_financing,650,12,1890,inquiry,2026-10-05T17:25:00+00:00,,2026-10-11T14:24:27.761953+00:00

@@ -1,0 +1,17 @@
+{
+  "number": 9,
+  "title": "Call customer for 6-month service reminder",
+  "state": "open",
+  "labels": [
+    "service"
+  ],
+  "assignees": [],
+  "author": "josephhomeworksai-hash",
+  "created_at": "2026-10-11T14:29:48Z",
+  "updated_at": "2026-10-11T14:29:48Z",
+  "url": "https://github.com/josephhomeworksai-hash/dealership-test-tasks/issues/9",
+  "repo": "josephhomeworksai-hash/dealership-test-tasks",
+  "comments": 0,
+  "body": "Remind Pedro Ejemplo that his Forza 300 needs the first service. Offer Tuesday or Wednesday.",
+  "source": "github"
+}

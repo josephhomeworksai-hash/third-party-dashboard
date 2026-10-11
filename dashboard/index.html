@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dealership-test – Search all services</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body{font-family:system-ui,Arial,sans-serif;margin:0;background:#f4f5f7;color:#1c1e21}
+  header{background:#1c1e21;color:#fff;padding:16px 24px}
+  header h1{margin:0;font-size:20px} header p{margin:4px 0 0;font-size:13px;color:#aaa}
+  main{max-width:900px;margin:20px auto;padding:0 16px}
+  #q{width:100%;box-sizing:border-box;padding:12px 14px;font-size:18px;border:1px solid #ccd0d5;border-radius:8px}
+  .filters{margin:12px 0;display:flex;gap:10px;flex-wrap:wrap}
+  .filters label{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:16px;color:#fff;font-size:13px;cursor:pointer}
+  #summary{margin:8px 0 14px;font-size:14px;color:#555}
+  .card{background:#fff;border-radius:8px;padding:12px 14px;margin-bottom:10px;border-left:6px solid #999;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .badge{display:inline-block;color:#fff;font-size:11px;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-right:8px;letter-spacing:.5px}
+  .title{font-weight:600;font-size:16px} .meta{font-size:12px;color:#666;margin:4px 0}
+  .snip{font-size:14px;margin:6px 0} .file{font-size:12px;color:#444;font-family:monospace}
+  .file a{color:#1b6ac9;text-decoration:none;cursor:pointer} mark{background:#ffe58a}
+  .gmail{background:#d93025;border-color:#d93025}.github{background:#24292f;border-color:#24292f}
+  .notion{background:#7b6f5a;border-color:#7b6f5a}.supabase{background:#1f9d6b;border-color:#1f9d6b}
+  .card.gmail{background:#fff}.card.github{background:#fff}.card.notion{background:#fff}.card.supabase{background:#fff}
+  #viewer{white-space:pre-wrap;background:#111;color:#e6e6e6;padding:12px;border-radius:8px;font-size:12px;display:none;margin-top:10px;max-height:300px;overflow:auto}
+</style>
+</head>
+<body>
+<header>
+  <h1>Dealership-test – one search for Gmail, GitHub, Notion and Supabase</h1>
+  <p>Searches the local files in dataExports/. All data is fake test data.</p>
+</header>
+<main>
+  <input id="q" placeholder="Search everything… try: financing, Forza, Vento, TikTok" autofocus>
+  <div class="filters" id="filters"></div>
+  <div id="summary"></div>
+  <div id="results"></div>
+  <div id="viewer"></div>
+</main>
+<script>
+const SERVICES=["gmail","github","notion","supabase"];
+const LABEL={gmail:"Gmail",github:"GitHub",notion:"Notion",supabase:"Supabase"};
+const active=new Set(SERVICES);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function hl(text,terms){let t=esc(text);terms.forEach(w=>{if(!w)return;const r=new RegExp("("+w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig");t=t.replace(r,"<mark>$1</mark>");});return t;}
+const f=document.getElementById("filters");
+SERVICES.forEach(s=>{const l=document.createElement("label");l.className=s;l.innerHTML=`<input type="checkbox" checked data-s="${s}"> ${LABEL[s]} <span id="c-${s}"></span>`;f.appendChild(l);});
+f.addEventListener("change",e=>{const s=e.target.dataset.s;e.target.checked?active.add(s):active.delete(s);run();});
+const q=document.getElementById("q");let timer;
+q.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(run,150);});
+async function run(){
+  const query=q.value;const terms=query.toLowerCase().split(/\s+/).filter(Boolean);
+  const r=await fetch("/api/search?q="+encodeURIComponent(query)+"&services="+[...active].join(","));
+  const d=await r.json();
+  SERVICES.forEach(s=>document.getElementById("c-"+s).textContent="("+d.counts[s]+")");
+  document.getElementById("summary").textContent=d.total+" result"+(d.total===1?"":"s")+(query?` for "${query}"`:" (showing everything)");
+  document.getElementById("results").innerHTML=d.results.map(x=>`
+    <div class="card ${x.service}">
+      <span class="badge ${x.service}">${LABEL[x.service]}</span><span class="title">${hl(x.title,terms)}</span>
+      <div class="meta">${esc(x.meta)}</div>
+      <div class="snip">${hl(x.snippet,terms)}</div>
+      <div class="file">File: <a onclick="openFile('${esc(x.file)}')">${esc(x.file)}</a>${x.url?` · <a href="${esc(x.url)}" target="_blank" rel="noopener">open original</a>`:""}</div>
+    </div>`).join("");
+}
+async function openFile(p){const v=document.getElementById("viewer");v.style.display="block";v.textContent=await (await fetch("/api/file?path="+encodeURIComponent(p))).text();v.scrollIntoView();}
+q.value=new URLSearchParams(location.search).get("q")||"";
+run();
+</script>
+</body>
+</html>

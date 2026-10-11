@@ -1,0 +1,17 @@
+{
+  "number": 10,
+  "title": "Update price list after exchange-rate change",
+  "state": "open",
+  "labels": [
+    "pricing"
+  ],
+  "assignees": [],
+  "author": "josephhomeworksai-hash",
+  "created_at": "2026-10-11T14:29:48Z",
+  "updated_at": "2026-10-11T14:29:48Z",
+  "url": "https://github.com/josephhomeworksai-hash/dealership-test-tasks/issues/10",
+  "repo": "josephhomeworksai-hash/dealership-test-tasks",
+  "comments": 0,
+  "body": "Review all prices for Forza, Vento and HJM and publish new list on WhatsApp status and Instagram.",
+  "source": "github"
+}

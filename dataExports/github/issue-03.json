@@ -1,0 +1,18 @@
+{
+  "number": 3,
+  "title": "Follow up financing lead: Carlos Test",
+  "state": "open",
+  "labels": [
+    "financing",
+    "lead"
+  ],
+  "assignees": [],
+  "author": "josephhomeworksai-hash",
+  "created_at": "2026-10-11T14:29:44Z",
+  "updated_at": "2026-10-11T14:29:44Z",
+  "url": "https://github.com/josephhomeworksai-hash/dealership-test-tasks/issues/3",
+  "repo": "josephhomeworksai-hash/dealership-test-tasks",
+  "comments": 0,
+  "body": "Carlos Test asked about in-house financing for an HJM 150. Send payment plan: 30% down, 12 weekly installments.",
+  "source": "github"
+}

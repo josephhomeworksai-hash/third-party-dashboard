@@ -147,3 +147,12 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+# Never commit secrets
+.env
+.env.*
+*.pem
+*.key
+.claude/settings.local.json
+__pycache__/
+*.pyc
+.DS_Store

@@ -1,0 +1,17 @@
+{
+  "number": 2,
+  "title": "Update stock count for Vento Crossmax",
+  "state": "open",
+  "labels": [
+    "inventory"
+  ],
+  "assignees": [],
+  "author": "josephhomeworksai-hash",
+  "created_at": "2026-10-11T14:29:44Z",
+  "updated_at": "2026-10-11T14:29:44Z",
+  "url": "https://github.com/josephhomeworksai-hash/dealership-test-tasks/issues/2",
+  "repo": "josephhomeworksai-hash/dealership-test-tasks",
+  "comments": 0,
+  "body": "Physical count says 4 units, system says 6. Fix inventory sheet and notify sales.",
+  "source": "github"
+}
