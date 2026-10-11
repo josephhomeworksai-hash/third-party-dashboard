@@ -16,12 +16,14 @@
       "url": "https://mcp.supabase.com/mcp?project_ref=hworueeyzkemfldzqlxo&read_only=true"
     },
     "gmail": {
-      "type": "http",
-      "url": "https://gmailmcp.googleapis.com/mcp/v1",
-      "oauth": {
-        "clientId": "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com",
-        "callbackPort": 8765,
-        "scopes": "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.compose"
+      "command": "npx",
+      "args": [
+        "-y",
+        "gmail-mcp-imap@1.0.3"
+      ],
+      "env": {
+        "GMAIL_EMAIL": "${GMAIL_EMAIL}",
+        "GMAIL_APP_PASSWORD": "${GMAIL_APP_PASSWORD}"
       }
     }
   }

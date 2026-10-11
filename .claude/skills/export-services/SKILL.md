@@ -6,7 +6,7 @@ description: Download (export) test items from Gmail, GitHub, Notion and Supabas
 # export-services
 
 Repeat the full download of the Dealership-test data from the 4 MCP servers
-(`gmail`, `github`, `notion`, `supabase`, all defined in `.mcp.json`) into `dataExports/<service>/`.
+(`gmail`, `github`, `notion`, `supabase`, all defined in `.mcp.json`; Gmail uses an app password, see the README) into `dataExports/<service>/`.
 The formats are explained in `localStorageFormats.md`. Follow them exactly so the dashboard keeps working.
 
 ## Before you start
@@ -19,10 +19,25 @@ The formats are explained in `localStorageFormats.md`. Follow them exactly so th
 
 ## 1. Gmail → `dataExports/gmail/<messageId>.json`
 
-1. Use the Gmail MCP search tool (search threads / list messages) with the query `"fake customer inquiry for class assignment"` (add `in:anywhere`). The 10 test emails contain this phrase at the end of the body.
-2. For each thread, use the Gmail MCP "get thread" / "get message" tool with plain-text format to read the full message.
+The `gmail` server is the community server `gmail-mcp-imap` (IMAP + app password, tools below).
+It lists INBOX mail, so the 10 fake emails (self-sent, they also sit in the INBOX) are found there.
+
+1. Call the MCP tool `search_emails` with `query: "fake customer inquiry for class assignment"` and `limit: 50`.
+   The query uses Gmail search syntax (X-GM-RAW) over the whole message text. The 10 test emails contain this phrase at the end of the body, so only they match. If you get 0 results, retry with `"fake customer inquiry"` and `"in:anywhere"` added; never export mail that does not contain the phrase (for example security alerts or the "Resumen diario" emails).
+   The result is a list of headers with a numeric `uid` (no body).
+2. For each `uid`, call `get_email_content` (`mailbox` defaults to `INBOX`). It returns `subject, from, to, date, snippet, body, isRead`.
+   Double check the body contains the phrase before saving.
+   (`get_emails_by_label` and `list_labels` exist too, but are not needed. Do not use the send, reply, delete, label or star tools.)
 3. Write one JSON file per message with exactly these keys:
-   `id, threadId, from, to (list), cc (list), subject, date (ISO UTC), labels (list), snippet, body (plain text), viewUrl, source` (`source` is always `"gmail"`).
+   `id, threadId, from, to (list), cc (list), subject, date (ISO UTC), labels (list), snippet, body (plain text), viewUrl, source`.
+   This server does not return every field, so fill them like this:
+   - `id`: if a file in `dataExports/gmail/` already has the same `subject` and `date`, reuse that file name, `id`, `threadId` and `viewUrl` and just overwrite it (this keeps the dashboard from showing duplicates). Otherwise `id` = the `uid` as a string, and `threadId` = the same value.
+   - `from`: the sender address. `to`: list of addresses (split the `to` text on commas). `cc`: `[]` (not provided by the server).
+   - `date`: the `date` field (already ISO, UTC).
+   - `labels`: `["INBOX"]` plus `"UNREAD"` when `isRead` is false.
+   - `snippet`: the `snippet` field. `body`: the plain text `body`.
+   - `viewUrl`: `https://mail.google.com/mail/?authuser=josephhomeworksai@gmail.com#search/` followed by the URL-encoded subject.
+   - `source`: always `"gmail"`.
 
 ## 2. GitHub → `dataExports/github/issue-NN.json`
 
