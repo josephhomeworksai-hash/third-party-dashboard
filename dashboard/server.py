@@ -127,6 +127,35 @@ def load_all():
     return load_gmail() + load_github() + load_notion() + load_supabase()
 
 
+def stats():
+    def jl(d):
+        d=os.path.join(EXPORTS,d); return [os.path.join(d,n) for n in sorted(os.listdir(d))] if os.path.isdir(d) else []
+    gmail=[p for p in jl("gmail") if p.endswith(".json")]
+    issues=[json.load(open(p,encoding="utf-8")) for p in jl("github") if p.endswith(".json")]
+    notion=[p for p in jl("notion") if p.endswith(".md")]
+    def rows(t):
+        p=os.path.join(EXPORTS,"supabase",t+".json")
+        return json.load(open(p,encoding="utf-8")).get("rows",[]) if os.path.isfile(p) else []
+    motos, sales = rows("motorcycles"), rows("clients_sales")
+    sold=[r for r in sales if r.get("status")=="sold"]
+    stages={}
+    for p in notion:
+        st=parse_front_matter(open(p,encoding="utf-8").read())[0].get("properties",{}).get("Stage","?")
+        stages[st]=stages.get(st,0)+1
+    mby={m.get("id"):m for m in motos}
+    return {
+        "counts":{"gmail":len(gmail),"github":len(issues),"notion":len(notion),"motorcycles":len(motos),"sales":len(sales)},
+        "revenue":sum(r.get("sale_price_usd") or 0 for r in sold),
+        "sold":len(sold),"pending":len(sales)-len(sold),
+        "open_issues":sum(1 for i in issues if i.get("state")=="open"),
+        "low_stock":[f"{m.get('brand')} {m.get('model')}" for m in motos if (m.get("stock") or 0)<=1],
+        "inventory_value":sum((m.get("price_usd") or 0)*(m.get("stock") or 0) for m in motos),
+        "stages":stages,
+        "sales":[{"client":r.get("client_name"),"bike":(lambda m:f"{m.get('brand','')} {m.get('model','')}".strip())(mby.get(r.get("motorcycle_id"),{})),
+                  "payment":r.get("payment_type"),"price":r.get("sale_price_usd"),"status":r.get("status"),"source":r.get("lead_source")} for r in sales],
+    }
+
+
 def snippet(text, terms, width=160):
     text = re.sub(r"\s+", " ", text).strip()
     low = text.lower()
@@ -172,6 +201,8 @@ class Handler(BaseHTTPRequestHandler):
             res = search(q, svc)
             counts = {s: sum(1 for r in res if r["service"] == s) for s in SERVICES}
             self._send(200, "application/json", json.dumps({"query": q, "total": len(res), "counts": counts, "results": res}))
+        elif u.path == "/api/stats":
+            self._send(200, "application/json", json.dumps(stats()))
         elif u.path in ("/", "/index.html"):
             self._send(200, "text/html; charset=utf-8", open(os.path.join(HERE, "index.html"), encoding="utf-8").read())
         elif u.path == "/api/file":
