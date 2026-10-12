@@ -23,9 +23,15 @@ The accounts used are test accounts only. No passwords, tokens or API keys are s
 ├── dashboard/
 │   ├── server.py                     the dashboard (Python, standard library only)
 │   └── index.html                    the dashboard page
+├── presentation/
+│   └── HW3_Third-Party-Data-Dashboard.pptx   the class presentation (slides)
 ├── localStorageFormats.md            format used for each service and why
 └── README.md
 ```
+
+## Presentation
+
+The slide deck is in [`presentation/HW3_Third-Party-Data-Dashboard.pptx`](presentation/HW3_Third-Party-Data-Dashboard.pptx).
 
 ## The four services (test data)
 

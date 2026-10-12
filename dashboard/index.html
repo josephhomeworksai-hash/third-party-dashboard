@@ -15,29 +15,9 @@
   h1{margin:0;font-size:34px;font-weight:800;letter-spacing:-.5px;color:#fff}
   .sub{color:var(--muted);font-size:14px;margin-top:4px}
   .pill{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 12px;font-size:12px;color:var(--muted)}
-  .pill b{color:var(--green)}
-  .grid{display:grid;gap:14px}
-  .kpis{grid-template-columns:repeat(5,1fr)}
-  .kpis2{grid-template-columns:repeat(4,1fr);margin-top:14px}
-  @media(max-width:900px){.kpis,.kpis2{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr!important}}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
-  .k-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:8px}
-  .k-val{font-size:34px;font-weight:800;margin-top:6px;color:#fff}
-  .k-note{font-size:12px;color:var(--muted);margin-top:2px}
-  .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-  .green{color:var(--green)!important}.yellow{color:var(--yellow)!important}.red{color:var(--red)!important}
-  .two{grid-template-columns:1.4fr 1fr;margin-top:14px}
   h2{font-size:15px;margin:0 0 12px;font-weight:600;color:#fff}
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  th{text-align:left;color:var(--muted);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.6px;padding:8px 6px;border-bottom:1px solid var(--line)}
-  td{padding:9px 6px;border-bottom:1px solid var(--line)} tr:last-child td{border-bottom:0}
-  .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px}
-  .t-sold{background:rgba(34,227,160,.12);color:var(--green)}
-  .t-pend{background:rgba(245,197,66,.12);color:var(--yellow)}
-  .t-bad{background:rgba(255,92,108,.12);color:var(--red)}
-  .bar{height:8px;background:#13203f;border-radius:6px;overflow:hidden;margin:4px 0 10px}.bar i{display:block;height:100%}
-  .alert{border-left:3px solid var(--red);padding:6px 10px;margin:6px 0;background:rgba(255,92,108,.06);border-radius:6px;font-size:13px}
-  .search{margin-top:14px}
+  .search{margin-top:4px}
   #q{width:100%;padding:13px 16px;font-size:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:#fff;outline:none;font-family:inherit}
   #q:focus{border-color:var(--blue)}
   .filters{margin:12px 0;display:flex;gap:8px;flex-wrap:wrap}
@@ -65,18 +45,6 @@
   <div class="pill">Source: <b>dataExports/</b> · local only</div>
 </header>
 
-<div class="grid kpis" id="kpis"></div>
-<div class="grid kpis2" id="kpis2"></div>
-
-<div class="grid two">
-  <div class="card"><h2>Ventas · Sales (Supabase clients_sales)</h2>
-    <table><thead><tr><th>Client</th><th>Motorcycle</th><th>Payment</th><th>Price</th><th>Status</th></tr></thead><tbody id="sales"></tbody></table>
-  </div>
-  <div class="card"><h2>Pipeline · Notion stages</h2><div id="stages"></div>
-    <h2 style="margin-top:16px">Alertas · Low stock</h2><div id="alerts"></div>
-  </div>
-</div>
-
 <div class="card search">
   <h2>Search all services · Buscar en todo</h2>
   <input id="q" placeholder="Search everything… try: financing, Forza, Vento, TikTok" autofocus>
@@ -92,28 +60,7 @@ const SERVICES=["gmail","github","notion","supabase"];
 const LABEL={gmail:"Gmail",github:"GitHub",notion:"Notion",supabase:"Supabase"};
 const active=new Set(SERVICES);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const usd=n=>"$"+Number(n||0).toLocaleString("en-US");
 function hl(text,terms){let t=esc(text);terms.forEach(w=>{if(!w)return;const r=new RegExp("("+w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig");t=t.replace(r,"<mark>$1</mark>");});return t;}
-const kpi=(label,val,note,cls="",dot="#4c8dff")=>`<div class="card"><div class="k-label"><span class="dot" style="background:${dot}"></span>${label}</div><div class="k-val ${cls}">${val}</div><div class="k-note">${note}</div></div>`;
-async function loadStats(){
-  const s=await (await fetch("/api/stats")).json();const c=s.counts;
-  document.getElementById("kpis").innerHTML=
-    kpi("Gmail emails",c.gmail,"dataExports/gmail","","#ff5c6c")+
-    kpi("GitHub issues",c.github,"dataExports/github","","#4c8dff")+
-    kpi("Notion pages",c.notion,"dataExports/notion","","#d6dbea")+
-    kpi("Supabase motorcycles",c.motorcycles,"motorcycles table","","#22e3a0")+
-    kpi("Supabase sales",c.sales,"clients_sales table","","#22e3a0");
-  document.getElementById("kpis2").innerHTML=
-    kpi("Revenue (sold)",usd(s.revenue),s.sold+" ventas cerradas","green","#22e3a0")+
-    kpi("Inventory value",usd(s.inventory_value),"price × stock","green","#22e3a0")+
-    kpi("Pending sales",s.pending,"pendientes por cerrar","yellow","#f5c542")+
-    kpi("Alerts",s.low_stock.length,"low stock (≤1) · "+s.open_issues+" open issues","red","#ff5c6c");
-  document.getElementById("sales").innerHTML=s.sales.map(r=>`<tr><td>${esc(r.client)}</td><td>${esc(r.bike)}</td><td>${esc((r.payment||"").replace(/_/g," "))}</td><td class="green">${usd(r.price)}</td><td><span class="tag ${r.status==="sold"?"t-sold":(r.status==="lost"||r.status==="cancelled")?"t-bad":"t-pend"}">${esc(r.status)}</span></td></tr>`).join("");
-  const tot=Object.values(s.stages).reduce((a,b)=>a+b,0)||1;
-  const col={Sold:"#22e3a0",Lost:"#ff5c6c",Negotiating:"#f5c542",New:"#4c8dff"};
-  document.getElementById("stages").innerHTML=Object.entries(s.stages).map(([k,v])=>`<div style="display:flex;justify-content:space-between;font-size:13px"><span>${esc(k)}</span><b>${v}</b></div><div class="bar"><i style="width:${v/tot*100}%;background:${col[k]||"#8a97b5"}"></i></div>`).join("");
-  document.getElementById("alerts").innerHTML=s.low_stock.map(m=>`<div class="alert">⚠ ${esc(m)} — low stock</div>`).join("")||`<div class="k-note">Sin alertas</div>`;
-}
 const f=document.getElementById("filters");
 SERVICES.forEach(s=>{const l=document.createElement("label");l.innerHTML=`<input type="checkbox" checked data-s="${s}"> ${LABEL[s]} <span id="c-${s}" style="color:var(--muted)"></span>`;f.appendChild(l);});
 f.addEventListener("change",e=>{const s=e.target.dataset.s;e.target.checked?active.add(s):active.delete(s);run();});
@@ -134,7 +81,7 @@ async function run(){
 }
 async function openFile(p){const v=document.getElementById("viewer");v.style.display="block";v.textContent=await (await fetch("/api/file?path="+encodeURIComponent(p))).text();v.scrollIntoView();}
 q.value=new URLSearchParams(location.search).get("q")||"";
-loadStats();run();
+run();
 </script>
 </body>
 </html>
