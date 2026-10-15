@@ -75,16 +75,19 @@ properties:
 
 Project ref: `hworueeyzkemfldzqlxo`. Use the Supabase MCP `execute_sql` tool (read-only queries only).
 
-1. Rows: `select coalesce(json_agg(t order by id),'[]'::json) from public.motorcycles t` and the same for `public.clients_sales`.
-2. Write `motorcycles.json` and `clients_sales.json` as
-   `{"source":"supabase","project_ref":"hworueeyzkemfldzqlxo","table":"public.<name>","row_count":N,"exported_at":"<today>","rows":[...]}`.
-3. Also write `motorcycles.csv` and `clients_sales.csv` (header row + one line per row, same columns, proper CSV quoting).
-4. Schema: `select table_name, json_agg(json_build_object('column',column_name,'type',data_type,'nullable',is_nullable,'default',column_default) order by ordinal_position) cols from information_schema.columns where table_schema='public' and table_name in ('motorcycles','clients_sales') group by table_name`.
-   Write `schema.json` as `{"project_ref":"...","schema":"public","tables":{"<table>":[columns...]}}`.
+The export is **one table, `clients_sales`, with 10 rows and 3 columns**: `id, client_name, motorcycle`.
+The motorcycle name comes from the `motorcycles` table, joined in the query. Do not export `motorcycles` as its own file.
+
+1. Rows: `select coalesce(json_agg(t order by id),'[]'::json) from (select cs.id, cs.client_name, m.brand || ' ' || m.model as motorcycle from public.clients_sales cs join public.motorcycles m on m.id = cs.motorcycle_id) t`.
+2. Write `clients_sales.json` as
+   `{"source":"supabase","project_ref":"hworueeyzkemfldzqlxo","table":"public.clients_sales","row_count":N,"exported_at":"<today>","rows":[...]}`.
+3. Also write `clients_sales.csv` (header `id,client_name,motorcycle` + one line per row, proper CSV quoting).
+4. Write `schema.json` as `{"project_ref":"...","schema":"public","tables":{"clients_sales":[...]}}` with the three columns:
+   `id` (bigint), `client_name` (text), `motorcycle` (text, brand + model). All `nullable: "NO"`, `default: null`.
 
 ## After exporting
 
 1. Count the files per service and check each service has at least 5 items.
-2. Run `python3 dashboard/server.py --search "financing"` and check the output shows results for all four services.
+2. Run `python3 dashboard/server.py --search ""` and check it prints `supabase 10`, then `--search "Forza"` and check the output shows results for all four services.
 3. Tell the user the counts per service and remind them to run `python3 dashboard/server.py` and open http://localhost:8000.
 4. Run `git status` and make sure no token or secret appears in any exported file. Do not commit unless the user asks.

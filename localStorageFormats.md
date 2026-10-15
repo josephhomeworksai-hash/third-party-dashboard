@@ -12,7 +12,7 @@ Each format below was chosen so that (a) a person can open the file and read it,
 | Gmail    | `dataExports/gmail/`    | JSON                                | email message        | 10             |
 | GitHub   | `dataExports/github/`   | JSON                                | issue                | 10             |
 | Notion   | `dataExports/notion/`   | Markdown + YAML front matter        | page                 | 10             |
-| Supabase | `dataExports/supabase/` | JSON + CSV (plus `schema.json`)     | table                | 2 tables, 20 rows |
+| Supabase | `dataExports/supabase/` | JSON + CSV (plus `schema.json`)     | table row (client)   | 1 table, 10 rows  |
 
 ## Gmail → JSON (one file per message, named `<messageId>.json`)
 
@@ -39,17 +39,22 @@ The page text stays readable below it.
 
 Metadata kept in the front matter: `source`, `id` (page UUID), `url`, `title`, `database`, `data_source_id`, `created_time`, `last_edited_time`, and a `properties` block with the database columns (`Brand`, `Lead Source`, `Stage`, `Follow-up Date`).
 
-## Supabase → JSON and CSV per table, plus `schema.json`
+## Supabase → one table as JSON and CSV, plus `schema.json`
+
+The Supabase project has two tables: `clients_sales` (the sales) and `motorcycles` (the catalog).
+Each sale only stores a number (`motorcycle_id`) that points to a motorcycle.
+To keep the export simple, the export joins both tables into one table of 10 rows, one per client,
+with only three columns: the sale id, the client's full name and the motorcycle's brand and model.
+The Supabase database itself is not changed.
 
 Why two formats for rows: the data is a table, so CSV opens directly in Excel or Google Sheets.
 The JSON version of the same rows also carries table-level metadata (project, table name, row count, export date),
 which a CSV cannot hold.
-`schema.json` records every column name, type, nullability and default so the data can be understood or rebuilt later.
+`schema.json` records every column name, type and nullability so the data can be understood later.
 
 Files:
-- `motorcycles.json` / `motorcycles.csv` – 10 rows: `id, brand, model, year, engine_cc, color, price_usd, stock, status, created_at`
-- `clients_sales.json` / `clients_sales.csv` – 10 rows: `id, client_name, client_contact, lead_source, motorcycle_id, payment_type, down_payment_usd, installments, sale_price_usd, status, inquiry_at, sold_at, created_at`
-- `schema.json` – column definitions for both tables
+- `clients_sales.json` / `clients_sales.csv` – 10 rows: `id, client_name, motorcycle` (for example `1, Carlos Test, Forza FZ150 Street`)
+- `schema.json` – column definitions for that table
 
 Table-level metadata kept in the JSON: `source`, `project_ref`, `table`, `row_count`, `exported_at`.
 
