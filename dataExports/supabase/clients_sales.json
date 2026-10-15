@@ -3,157 +3,57 @@
   "project_ref": "hworueeyzkemfldzqlxo",
   "table": "public.clients_sales",
   "row_count": 10,
-  "exported_at": "2026-10-11",
+  "exported_at": "2026-10-14",
   "rows": [
     {
       "id": 1,
       "client_name": "Carlos Test",
-      "client_contact": "@carlos_test_ig",
-      "lead_source": "Instagram",
-      "motorcycle_id": 1,
-      "payment_type": "in_house_financing",
-      "down_payment_usd": 500,
-      "installments": 12,
-      "sale_price_usd": 1450,
-      "status": "sold",
-      "inquiry_at": "2026-09-01T14:15:00+00:00",
-      "sold_at": "2026-09-05T20:00:00+00:00",
-      "created_at": "2026-10-11T14:24:27.761953+00:00"
+      "motorcycle": "Forza FZ150 Street"
     },
     {
       "id": 2,
       "client_name": "Maria Prueba",
-      "client_contact": "@maria_prueba_tt",
-      "lead_source": "TikTok",
-      "motorcycle_id": 2,
-      "payment_type": "cash",
-      "down_payment_usd": 1890,
-      "installments": 0,
-      "sale_price_usd": 1890,
-      "status": "sold",
-      "inquiry_at": "2026-09-02T16:30:00+00:00",
-      "sold_at": "2026-09-02T21:45:00+00:00",
-      "created_at": "2026-10-11T14:24:27.761953+00:00"
+      "motorcycle": "Forza FZ200 Sport"
     },
     {
       "id": 3,
       "client_name": "Jose Ejemplo",
-      "client_contact": "@jose_ejemplo_tt",
-      "lead_source": "TikTok",
-      "motorcycle_id": 5,
-      "payment_type": "in_house_financing",
-      "down_payment_usd": 600,
-      "installments": 10,
-      "sale_price_usd": 1520,
-      "status": "negotiating",
-      "inquiry_at": "2026-09-10T23:20:00+00:00",
-      "sold_at": null,
-      "created_at": "2026-10-11T14:24:27.761953+00:00"
+      "motorcycle": "Vento VT150 Cruiser"
     },
     {
       "id": 4,
       "client_name": "Ana Demo",
-      "client_contact": "@ana_demo_ig",
-      "lead_source": "Instagram",
-      "motorcycle_id": 8,
-      "payment_type": "in_house_financing",
-      "down_payment_usd": 400,
-      "installments": 8,
-      "sale_price_usd": 1380,
-      "status": "sold",
-      "inquiry_at": "2026-09-12T12:50:00+00:00",
-      "sold_at": "2026-09-20T15:10:00+00:00",
-      "created_at": "2026-10-11T14:24:27.761953+00:00"
+      "motorcycle": "HJM HJ150 Delivery"
     },
     {
       "id": 5,
       "client_name": "Luis Falso",
-      "client_contact": "@luis_falso_ig",
-      "lead_source": "Instagram",
-      "motorcycle_id": 4,
-      "payment_type": "in_house_financing",
-      "down_payment_usd": 800,
-      "installments": 12,
-      "sale_price_usd": 2350,
-      "status": "negotiating",
-      "inquiry_at": "2026-09-16T01:05:00+00:00",
-      "sold_at": null,
-      "created_at": "2026-10-11T14:24:27.761953+00:00"
+      "motorcycle": "Forza FZ250 Trail"
     },
     {
       "id": 6,
       "client_name": "Sofia Muestra",
-      "client_contact": "@sofia_muestra_tt",
-      "lead_source": "TikTok",
-      "motorcycle_id": 7,
-      "payment_type": "cash",
-      "down_payment_usd": 1190,
-      "installments": 0,
-      "sale_price_usd": 1190,
-      "status": "sold",
-      "inquiry_at": "2026-09-18T18:40:00+00:00",
-      "sold_at": "2026-09-19T14:30:00+00:00",
-      "created_at": "2026-10-11T14:24:27.761953+00:00"
+      "motorcycle": "Vento VT125 Classic"
     },
     {
       "id": 7,
       "client_name": "Pedro Ficticio",
-      "client_contact": "555-0101",
-      "lead_source": "Walk-in",
-      "motorcycle_id": 9,
-      "payment_type": "in_house_financing",
-      "down_payment_usd": 700,
-      "installments": 10,
-      "sale_price_usd": 1750,
-      "status": "sold",
-      "inquiry_at": "2026-09-22T13:15:00+00:00",
-      "sold_at": "2026-09-25T19:20:00+00:00",
-      "created_at": "2026-10-11T14:24:27.761953+00:00"
+      "motorcycle": "HJM HJ200 Cargo"
     },
     {
       "id": 8,
       "client_name": "Laura Inventada",
-      "client_contact": "@laura_inventada_ig",
-      "lead_source": "Instagram",
-      "motorcycle_id": 6,
-      "payment_type": "in_house_financing",
-      "down_payment_usd": 700,
-      "installments": 12,
-      "sale_price_usd": 1980,
-      "status": "negotiating",
-      "inquiry_at": "2026-09-28T22:00:00+00:00",
-      "sold_at": null,
-      "created_at": "2026-10-11T14:24:27.761953+00:00"
+      "motorcycle": "Vento VT200 Rocket"
     },
     {
       "id": 9,
       "client_name": "Diego Simulado",
-      "client_contact": "@diego_simulado_tt",
-      "lead_source": "TikTok",
-      "motorcycle_id": 1,
-      "payment_type": "cash",
-      "down_payment_usd": 1450,
-      "installments": 0,
-      "sale_price_usd": 1450,
-      "status": "lost",
-      "inquiry_at": "2026-10-02T00:10:00+00:00",
-      "sold_at": null,
-      "created_at": "2026-10-11T14:24:27.761953+00:00"
+      "motorcycle": "Forza FZ150 Street"
     },
     {
       "id": 10,
       "client_name": "Valeria Imaginaria",
-      "client_contact": "@valeria_imaginaria_tt",
-      "lead_source": "TikTok",
-      "motorcycle_id": 2,
-      "payment_type": "in_house_financing",
-      "down_payment_usd": 650,
-      "installments": 12,
-      "sale_price_usd": 1890,
-      "status": "inquiry",
-      "inquiry_at": "2026-10-05T17:25:00+00:00",
-      "sold_at": null,
-      "created_at": "2026-10-11T14:24:27.761953+00:00"
+      "motorcycle": "Forza FZ200 Sport"
     }
   ]
 }

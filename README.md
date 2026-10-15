@@ -19,7 +19,7 @@ The accounts used are test accounts only. No passwords, tokens or API keys are s
 │   ├── gmail/                        10 emails, one JSON file each
 │   ├── github/                       10 issues, one JSON file each
 │   ├── notion/                       10 pages, one Markdown file each (with front matter)
-│   └── supabase/                     2 tables as JSON + CSV, plus schema.json
+│   └── supabase/                     1 table (10 clients + their motorcycle) as JSON + CSV, plus schema.json
 ├── dashboard/
 │   ├── server.py                     the dashboard (Python, standard library only)
 │   └── index.html                    the dashboard page
@@ -40,7 +40,7 @@ The slide deck is in [`presentation/HW3_Third-Party-Data-Dashboard.pptx`](presen
 | Gmail    | 10 fake customer emails (prices, financing, availability, trade-in)       |
 | GitHub   | 10 issues in `josephhomeworksai-hash/dealership-test-tasks` (dealership to-dos) |
 | Notion   | database "Dealership Test" with 10 lead follow-up pages                   |
-| Supabase | project "Dealership-test", tables `motorcycles` and `clients_sales` (10 rows each) |
+| Supabase | project "Dealership-test", table `clients_sales` exported as 10 rows: id, client name, motorcycle |
 
 ## Setup (to connect Claude Code)
 

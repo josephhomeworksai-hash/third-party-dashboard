@@ -110,13 +110,11 @@ def load_supabase():
         t = json.load(open(p, encoding="utf-8"))
         table = t.get("table", name)
         for r in t.get("rows", []):
-            label = r.get("model") or r.get("client_name") or ""
-            brand = r.get("brand", "")
             items.append({
                 "service": "supabase",
-                "title": f"{table} #{r.get('id')}: {(brand + ' ' + label).strip()}",
+                "title": f"{table} #{r.get('id')}: {r.get('client_name', '')} · {r.get('motorcycle', '')}",
                 "text": " ".join(f"{k} {v}" for k, v in r.items()),
-                "meta": ", ".join(f"{k}={v}" for k, v in list(r.items())[1:6]),
+                "meta": f"Client: {r.get('client_name', '?')}, motorcycle: {r.get('motorcycle', '?')}",
                 "file": rel(p),
                 "url": "",
             })
