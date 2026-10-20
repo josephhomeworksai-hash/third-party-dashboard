@@ -21,7 +21,7 @@ JSON keeps those fields separate and typed (for example `to` and `labels` are li
 I did not use `.eml` because it is raw MIME text that is harder to read and parse.
 
 Metadata kept: `id`, `threadId`, `from`, `to`, `cc`, `subject`, `date` (ISO, UTC), `labels`, `snippet`, `body` (plain text), `viewUrl` (link back to Gmail), `source` (`"gmail"`).
-The Gmail server used (`gmail-mcp-imap`, IMAP) does not return `threadId`, `cc` or all labels, so on a new export the skill fills them as described in `SKILL.md` (`threadId` = `id`, `cc` = `[]`, `labels` = `INBOX` plus `UNREAD`). The keys stay the same, so the dashboard is not affected.
+Gmail is read through Anthropic's official `claude.ai Gmail` MCP connector (connected per-account from claude.ai → Settings → Connectors, not through `.mcp.json`), which returns every one of these fields directly — no guessing or backfilling needed.
 Attachments: none in the test data; the skill would list them in an `attachments` field if present.
 
 ## GitHub → JSON (one file per issue, named `issue-NN.json`)

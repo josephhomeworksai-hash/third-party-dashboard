@@ -46,31 +46,25 @@ The slide deck is in [`presentation/HW3_Third-Party-Data-Dashboard.pptx`](presen
 
 You need [Claude Code](https://code.claude.com) and Node.js (for `npx`) installed. Open Claude Code in this folder. It reads `.mcp.json` and asks you to approve the project servers.
 
-**Accounts:** Claude Code runs with your normal Claude account. The four services below do **not** use that account. Each one logs in separately with the **test** accounts (Notion and Supabase through OAuth in the browser, GitHub with a token, Gmail with an app password), so the Claude account used for Claude Code is independent from the test accounts.
+**Accounts:** Claude Code runs with your normal Claude account. The four services below do **not** use that account. Each one logs in separately with the **test** accounts (Notion, Supabase and Gmail through OAuth, GitHub with a token), so the Claude account used for Claude Code is independent from the test accounts.
 
 1. **Notion** – nothing to configure. In Claude Code run `/mcp`, choose `notion`, and sign in with the Notion test account in the browser (OAuth).
 2. **Supabase** – nothing to configure. Run `/mcp`, choose `supabase`, sign in (OAuth) and allow access to the project `hworueeyzkemfldzqlxo`. The URL has `read_only=true`, so the export cannot change data.
 3. **GitHub** – create a token for the test account `josephhomeworksai-hash` (classic token with `repo` scope, or a fine-grained token with read access to issues) at https://github.com/settings/tokens/new. Export it **before** starting Claude Code. Do not write it in any file.
-4. **Gmail** – uses the community server [`gmail-mcp-imap`](https://github.com/suhail-ak-2/gmail-mcp-imap) (IMAP with an app password, no Google Cloud project, nothing to install; `npx` downloads it). On the test account `josephhomeworksai@gmail.com`:
-   1. Turn on 2-Step Verification at https://myaccount.google.com/security.
-   2. Create an app password at https://myaccount.google.com/apppasswords (name it e.g. `hw3`). Copy the 16 characters.
-   3. Export the variables **before** starting Claude Code (never write them in a file). Together with the GitHub token this is:
-      ```
-      export GITHUB_PERSONAL_ACCESS_TOKEN=your_github_token
-      export GMAIL_EMAIL=josephhomeworksai@gmail.com
-      export GMAIL_APP_PASSWORD="yourapppassword16chars"
-      claude
-      ```
-5. Run `/mcp` and check that all four servers say `connected`.
+4. **Gmail** – uses Anthropic's own **official** Gmail connector (`claude.ai Gmail`), not a community package. It is connected at the account level, not through `.mcp.json`:
+   1. In your browser, go to claude.ai → **Settings → Connectors**.
+   2. If Gmail is connected to a personal account, **Disconnect** it first.
+   3. **Connect** Gmail again, and sign in with the **test** account `josephhomeworksai@gmail.com` (not a personal account) when Google's OAuth screen appears.
+   4. Once connected, it is available as an MCP connector inside Claude Code / Claude in this session — no token, password or env var needed.
+5. Run `/mcp` and check that all four servers say `connected` (Gmail appears as `claude.ai Gmail`).
 
-`.mcp.json` only contains the placeholders `${GITHUB_PERSONAL_ACCESS_TOKEN}`, `${GMAIL_EMAIL}` and `${GMAIL_APP_PASSWORD}`, which Claude Code fills in from your environment, so no secret is stored in the repo. When the homework is finished, delete the GitHub token and revoke the app password.
+`.mcp.json` only contains the placeholder `${GITHUB_PERSONAL_ACCESS_TOKEN}`, which Claude Code fills in from your environment, so no secret is stored in the repo. Gmail needs no secret at all — the OAuth connection lives in your claude.ai account settings, never in a file. When the homework is finished, delete the GitHub token and disconnect/revert the Gmail connector to your personal account.
 
 ### Gmail notes
 
-- The Gmail server's tools are `search_emails`, `get_email_content`, `get_emails_by_label`, `list_labels` (read) plus action tools such as `send_email`. The export skill only uses the read tools.
-- `search_emails` uses Gmail search syntax over the INBOX, so the skill finds the 10 fake emails with the phrase `"fake customer inquiry for class assignment"` and ignores everything else in the inbox.
-- If the server does not connect, check that the app password has no typos (paste it without spaces to be safe) and that IMAP is enabled in Gmail settings (Settings > See all settings > Forwarding and POP/IMAP).
-- *Alternative (not used):* Google's official remote server `https://gmailmcp.googleapis.com/mcp/v1`. It needs a Google Cloud project with the Gmail API and Gmail MCP API enabled and an OAuth client, which is why the app password option is used here.
+- Gmail is read through Anthropic's official `claude.ai Gmail` connector, using its `search_threads` and `get_message` tools (read-only). The export skill does not use any send/label/delete tool.
+- `search_threads` with the query `"fake customer inquiry for class assignment"` finds exactly the 10 fake emails and ignores everything else in the inbox.
+- *Not used:* the community package `gmail-mcp-imap` (IMAP + app password) and Google's own remote server `https://gmailmcp.googleapis.com/mcp/v1` (requires a Google Cloud project enrolled in Google's Developer Preview Program). Anthropic's connector needs neither.
 
 ## Run the download (the skill)
 
