@@ -6,12 +6,12 @@ description: Download (export) test items from Gmail, GitHub, Notion and Supabas
 # export-services
 
 Repeat the full download of the Dealership-test data from the 4 MCP servers
-(`gmail`, `github`, `notion`, `supabase`, all defined in `.mcp.json`; Gmail uses an app password, see the README) into `dataExports/<service>/`.
+(`github`, `notion`, `supabase` defined in `.mcp.json`; Gmail through Anthropic's own `claude.ai Gmail` connector, connected at the account level — see the README) into `dataExports/<service>/`.
 The formats are explained in `localStorageFormats.md`. Follow them exactly so the dashboard keeps working.
 
 ## Before you start
 
-1. Run `/mcp` and check that all 4 servers show `connected`. If one is not connected, stop and tell the user which one (and see the README setup section).
+1. Run `/mcp` and check that `github`, `notion`, `supabase` show `connected`, and that the `claude.ai Gmail` connector tools work (e.g. call `list_labels`). If one is not connected, stop and tell the user which one (and see the README setup section).
 2. Use only the test accounts. Never write secrets or tokens to any file.
 3. Create the folders if missing: `dataExports/gmail`, `dataExports/github`, `dataExports/notion`, `dataExports/supabase`.
 4. Export **at least 5 items per service** (normally all of them, 10+). Overwrite files with the same name so the skill can be re-run safely.
@@ -19,24 +19,22 @@ The formats are explained in `localStorageFormats.md`. Follow them exactly so th
 
 ## 1. Gmail → `dataExports/gmail/<messageId>.json`
 
-The `gmail` server is the community server `gmail-mcp-imap` (IMAP + app password, tools below).
-It lists INBOX mail, so the 10 fake emails (self-sent, they also sit in the INBOX) are found there.
+Gmail is read through Anthropic's official `claude.ai Gmail` MCP connector (tools `mcp__claude_ai_Gmail__*`), connected to the test account `josephhomeworksai@gmail.com` from claude.ai → Settings → Connectors. No token or password is involved.
 
-1. Call the MCP tool `search_emails` with `query: "fake customer inquiry for class assignment"` and `limit: 50`.
-   The query uses Gmail search syntax (X-GM-RAW) over the whole message text. The 10 test emails contain this phrase at the end of the body, so only they match. If you get 0 results, retry with `"fake customer inquiry"` and `"in:anywhere"` added; never export mail that does not contain the phrase (for example security alerts or the "Resumen diario" emails).
-   The result is a list of headers with a numeric `uid` (no body).
-2. For each `uid`, call `get_email_content` (`mailbox` defaults to `INBOX`). It returns `subject, from, to, date, snippet, body, isRead`.
+1. Call `search_threads` with `query: "\"fake customer inquiry for class assignment\""`, `pageSize: 20`, `view: THREAD_VIEW_MINIMAL`.
+   The 10 test emails contain this phrase at the end of the body, so only they match. Never export mail that does not contain the phrase (for example security alerts or newsletters).
+2. For each thread, call `get_message` with `messageId` set to the message `id` and `messageFormat: PLAIN_TEXT`. It returns `id, threadId, subject, sender, toRecipients, ccRecipients (if any), date, labelIds, snippet, plaintextBody, viewUrl`.
    Double check the body contains the phrase before saving.
-   (`get_emails_by_label` and `list_labels` exist too, but are not needed. Do not use the send, reply, delete, label or star tools.)
+   (Do not use the send, reply, delete, label or star tools — read-only.)
 3. Write one JSON file per message with exactly these keys:
    `id, threadId, from, to (list), cc (list), subject, date (ISO UTC), labels (list), snippet, body (plain text), viewUrl, source`.
-   This server does not return every field, so fill them like this:
-   - `id`: if a file in `dataExports/gmail/` already has the same `subject` and `date`, reuse that file name, `id`, `threadId` and `viewUrl` and just overwrite it (this keeps the dashboard from showing duplicates). Otherwise `id` = the `uid` as a string, and `threadId` = the same value.
-   - `from`: the sender address. `to`: list of addresses (split the `to` text on commas). `cc`: `[]` (not provided by the server).
-   - `date`: the `date` field (already ISO, UTC).
-   - `labels`: `["INBOX"]` plus `"UNREAD"` when `isRead` is false.
-   - `snippet`: the `snippet` field. `body`: the plain text `body`.
-   - `viewUrl`: `https://mail.google.com/mail/?authuser=josephhomeworksai@gmail.com#search/` followed by the URL-encoded subject.
+   The official API returns every field directly, no guessing needed:
+   - `id` = `id`. `threadId` = `threadId`.
+   - `from` = `sender`. `to` = `toRecipients`. `cc` = `ccRecipients` if present, else `[]`.
+   - `date` = `date` (already ISO, UTC).
+   - `labels` = `labelIds` as returned (already includes `INBOX`, `SENT`, `UNREAD`, etc.).
+   - `snippet` = `snippet`. `body` = `plaintextBody`.
+   - `viewUrl` = `viewUrl`.
    - `source`: always `"gmail"`.
 
 ## 2. GitHub → `dataExports/github/issue-NN.json`

@@ -14,17 +14,6 @@
     "supabase": {
       "type": "http",
       "url": "https://mcp.supabase.com/mcp?project_ref=hworueeyzkemfldzqlxo&read_only=true"
-    },
-    "gmail": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "gmail-mcp-imap@1.0.3"
-      ],
-      "env": {
-        "GMAIL_EMAIL": "${GMAIL_EMAIL}",
-        "GMAIL_APP_PASSWORD": "${GMAIL_APP_PASSWORD}"
-      }
     }
   }
 }
